@@ -5,8 +5,10 @@ pygame.init()
 black = (0, 0, 0)
 white = (255, 255, 255)
 
+#Definir tamaño de la pantalla
 size = (800, 600)
 
+#Función para crear la pantalla y variable para controlar los FPS
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 
@@ -30,11 +32,13 @@ ball_pos_y = 300
 ball_speed_x = 3
 ball_speed_y = 3
 
-
+#Loop principal
 while True:
+    #Loop de eventos 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
+    #Esta función permite cerrar la ventana del juego y terminar la ejecución
 
         #Movimiento jugador #1
         if event.type == pygame.KEYDOWN:
@@ -79,9 +83,10 @@ while True:
     #Evita que la raqueta salga del campo de juego
     if (player1_pos_y - player_height) < 0 or (player1_pos_y + player_height)> 600:
         player1_speed_y = 0
-    if player2_pos_y < 5 or (player2_pos_y + player_height)> 600-5:
+    if player2_pos_y < 5 or (player2_pos_y + player_height)> 600:
         player2_speed_y = 0
 
+    #Color de fondo
     screen.fill(black)
 
     #Dibujar las raquetas y la pelota
@@ -93,7 +98,8 @@ while True:
     if ball.colliderect(player1) or ball.colliderect(player2):
         ball_speed_x *= -1
 
-
-
+    #Actualiza la pantalla del juego con los cambias
     pygame.display.flip()
+
+    #Controla los FPS del juego
     clock.tick(60)
