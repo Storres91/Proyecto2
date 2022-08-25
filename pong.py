@@ -8,16 +8,17 @@ white = (255, 255, 255)
 #Definir tamaño de la pantalla
 size = (800, 600)
 
-#Función para crear la pantalla y variable para controlar los FPS
+#Función para crear la pantalla, variable para controlar los FPS y función para poder mostrar el marcador
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
+font = pygame.font.Font(None, 50)
 
 #Tamaño raquetas
 player_width = 20
 player_height = 90
 
 #Jugador #1
-player1_pos_x = 20
+player1_pos_x = 40
 player1_pos_y = 300
 player1_speed_y = 0
 
@@ -32,9 +33,11 @@ ball_pos_y = 300
 ball_speed_x = 3
 ball_speed_y = 3
 
-#Loop principal
+#marcador
+score_player1 = 0
+score_player2 = 0
+
 while True:
-    #Loop de eventos 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit()
@@ -67,13 +70,20 @@ while True:
     #Evitar que la pelota salga por encima o por debajo del mapa
     if ball_pos_y > 600-(player_height/2) or ball_pos_y < 5+(player_height/2):
         ball_speed_y *= -1
-    
-    #Devuelve la pelota al centro y cambia la dirección en la que iba
-    if ball_pos_x > 800 or ball_pos_x < 0:
+
+    #Devuelve la pelota al centro, cambia la dirección en la que iba y aumenta el marcador de puntos
+    if ball_pos_x > 800:
         ball_pos_x = 400
         ball_pos_y = 300
         ball_speed_x *= -1
-    
+        score_player1 += 1
+
+    if ball_pos_x < 0:
+        ball_pos_x = 400
+        ball_pos_y = 300
+        ball_speed_x *= -1
+        score_player2 += 1
+
     #Define la posición de las raquetas y de la pelota según condiciones anteriores
     player1_pos_y += player1_speed_y
     player2_pos_y += player2_speed_y
@@ -97,6 +107,16 @@ while True:
     #Genera el cambio de dirección de la pelota al colisionar con la raqueta
     if ball.colliderect(player1) or ball.colliderect(player2):
         ball_speed_x *= -1
+    
+    #Agrega el marcador y el jugador a la pantalla
+    score1 = font.render(str(score_player1), 0, white)
+    score2 = font.render(str(score_player2), 0, white)
+    Player1 = font.render("- Jugador 1", 0, white )
+    Player2 = font.render("- Jugador 2", 0, white)
+    screen.blit(score1, (20,15))
+    screen.blit(score2, (570,15))
+    screen.blit(Player1, (50, 15))
+    screen.blit(Player2, (600,15))
 
     #Actualiza la pantalla del juego con los cambias
     pygame.display.flip()
