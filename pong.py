@@ -83,7 +83,7 @@ while True:
     #Evita que la raqueta salga del campo de juego
     if (player1_pos_y - player_height) < 0 or (player1_pos_y + player_height)> 600:
         player1_speed_y = 0
-    if player2_pos_y < 5 or (player2_pos_y + player_height)> 600:
+    if (player2_pos_y - player_height) < 0 or (player2_pos_y + player_height)> 600:
         player2_speed_y = 0
 
     #Color de fondo
