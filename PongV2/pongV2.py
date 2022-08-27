@@ -42,10 +42,24 @@ class player1(pygame.sprite.Sprite):
         self.image.set_colorkey(black)
         self.rect = self.image.get_rect()
 
+class player1_front(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("frontRaqueta.png").convert()
+        self.image.set_colorkey(black)
+        self.rect = self.image.get_rect()
+
 class player2(pygame.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
         self.image = pygame.image.load("raqueta.png").convert()
+        self.image.set_colorkey(black)
+        self.rect = self.image.get_rect()
+
+class player2_front(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("frontRaqueta.png").convert()
         self.image.set_colorkey(black)
         self.rect = self.image.get_rect()
 
@@ -61,7 +75,9 @@ allSprites = pygame.sprite.Group()
 
 #Asignar a una variable la clase
 player1 = player1()
+player1_front = player1_front()
 player2 = player2()
+player2_front = player2_front()
 ball = ball()
 
 while True:
@@ -125,10 +141,14 @@ while True:
     #Coordenadas de player 1
     player1.rect.x = player1_pos_x
     player1.rect.y = player1_pos_y
+    player1_front.rect.x = player1_pos_x
+    player1_front.rect.y = player1_pos_y 
 
     #Coordenadas de player 2
     player2.rect.x = player2_pos_x
     player2.rect.y = player2_pos_y
+    player2_front.rect.x = player2_pos_x 
+    player2_front.rect.y = player2_pos_y
 
     #Coordenadas de la bola
     ball.rect.x = ball_pos_x
@@ -136,8 +156,15 @@ while True:
 
     #Colisión entre la bola y los jugadores
     collision_Player1 = pygame.sprite.collide_mask(player1, ball)
+    collision_Front_Player1 = pygame.sprite.collide_mask(player1_front, ball)
     collision_Player2 = pygame.sprite.collide_mask(player2, ball)
+    collision_Front_Player2 = pygame.sprite.collide_mask(player2_front, ball)
+
+    #Cambio de dirección cuando choca la bola con las raquetas
     if collision_Player1 or collision_Player2:
+        ball_speed_y *= -1
+    
+    if collision_Front_Player1 or collision_Front_Player2:
         ball_speed_x *= -1
 
     #Agrega los sprites a una lista para poder dibujarlo
