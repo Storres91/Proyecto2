@@ -8,10 +8,14 @@ pygame.init()
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Definir tamaño de la pantalla
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
+# Configs
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 1000
 WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
+
+MIN_PLAYER_HEIGHT = 80
+MAX_PLAYER_HEIGHT = WINDOW_HEIGHT - 100
+
 
 # Función para crear la pantalla, variable para controlar los FPS y función para poder mostrar el marcador
 screen = pygame.display.set_mode(WINDOW_SIZE)
@@ -72,15 +76,9 @@ while True:
         ball.change_x_direction()
 
     # Cambia la posición de la raqueta y de la bola
-    player1.update()
-    player2.update()
+    player1.update(MIN_PLAYER_HEIGHT, MAX_PLAYER_HEIGHT)
+    player2.update(MIN_PLAYER_HEIGHT, MAX_PLAYER_HEIGHT)
     ball.update()
-
-    # Evita que la raqueta salga del campo de juego
-    if player1.rect.y < 50 or player1.rect.y > 500:
-        player1.speed_y = 0
-    if player2.rect.y < 50 or player2.rect.y > 500:
-        player2.speed_y = 0
 
     # Colisión entre la bola y los jugadores
     collision_Player1 = pygame.sprite.collide_mask(player1, ball)
@@ -105,14 +103,10 @@ while True:
     allSprites.draw(screen)
 
     # Agrega el jugador y el marcador a la pantalla
-    score1 = font.render(str(player1.score), False, WHITE)
-    score2 = font.render(str(player2.score), False, WHITE)
-    Player1 = font.render("- Jugador 1", False, WHITE)
-    Player2 = font.render("- Jugador 2", False, WHITE)
-    screen.blit(score1, (20, 15))
-    screen.blit(score2, (570, 15))
-    screen.blit(Player1, (50, 15))
-    screen.blit(Player2, (600, 15))
+    score1 = font.render(str(player1.score)+" - Jugador 1", False, WHITE)
+    score2 = font.render(str(player2.score)+" - Jugador 2", False, WHITE)
+    screen.blit(score1, (30, 15))
+    screen.blit(score2, (WINDOW_HEIGHT-30, 15))
 
     pygame.display.flip()
 

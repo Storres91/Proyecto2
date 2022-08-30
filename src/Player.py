@@ -15,12 +15,16 @@ class Player (pygame.sprite.Sprite):
         self.speed_y = 0
         self.score = 0
 
-    def update(self):
+    def update(self, min_height: float, max_height: float):
         """
         update(self) -> None
         Updates this player's y_pos according to the y_speed
         """
         self.rect.y += self.speed_y
+
+        # Evita que la raqueta salga del campo de juego
+        if self.rect.y < min_height or self.rect.y > max_height:
+            self.speed_y = 0
 
     def score_up(self):
         """
@@ -31,17 +35,17 @@ class Player (pygame.sprite.Sprite):
 
     def move_up(self):
         """
-        move_up(self) -> None
-        Speed_y = -3 make the player go up (negative y)
+        move_up(self, min_height, max_height) -> None
+        Speed_y = -3 make the player go up (negative y) to a maximum height of max_height
         """
-        self.speed_y = -3
+        self.speed_y += -3
 
     def move_down(self):
         """
-        move_down(self) -> None
-        Speed_y = 3 make the player go down (positive y)
+        move_down(self, min_height, max_height) -> None
+        Speed_y = 3 make the player go down (positive y) to a minimum height of min_height
         """
-        self.speed_y = 3
+        self.speed_y += 3
 
     def stop(self):
         """
