@@ -1,84 +1,38 @@
-import pygame
+import pygame, Player, Ball, Player_Cover
 pygame.init()
 
 #Colores
-black = (0, 0, 0)
-white = (255, 255, 255)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 #Definir tamaño de la pantalla
-size = (800, 600)
+WINDOW_SIZE = (800, 600)
+
+#Función para crear la pantalla, variable para controlar los FPS y función para poder mostrar el marcador
+screen = pygame.display.set_mode(WINDOW_SIZE)
+clock = pygame.time.Clock()
+font = pygame.font.Font(None, 50)
+pygame.display.set_caption("PONG")
 
 #Jugador #1
-player1_pos_x = 5
-player1_pos_y = 250
-player1_speed_y = 0
+player1 = Player(BLACK, 5, 250, 0)
+player1_front = Player_Cover(BLACK)
 
 #Jugador #2
-player2_pos_x = 720
-player2_pos_y = 250
-player2_speed_y = 0
+player2 = Player(BLACK, 720, 250, 0)
+player2_front = Player_Cover(BLACK)
 
 #Bola
-ball_pos_x = (size[0]/2)
-ball_pos_y = (size[1]/2)
-ball_speed_x = 3
-ball_speed_y = 3
+ball = Ball(BLACK, WINDOW_SIZE[0]/2, WINDOW_SIZE[1]/2, 3, 3)
 
 #marcador
 score_player1 = 0
 score_player2 = 0
 
-#Función para crear la pantalla, variable para controlar los FPS y función para poder mostrar el marcador
-screen = pygame.display.set_mode(size)
-clock = pygame.time.Clock()
-font = pygame.font.Font(None, 50)
-pygame.display.set_caption("PONG")
 
-#Clases de los jugadores y la bola
-class player1(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("raqueta.png").convert()
-        self.image.set_colorkey(black)
-        self.rect = self.image.get_rect()
-
-class player1_front(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("frontRaqueta.png").convert()
-        self.image.set_colorkey(black)
-        self.rect = self.image.get_rect()
-
-class player2(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("raqueta.png").convert()
-        self.image.set_colorkey(black)
-        self.rect = self.image.get_rect()
-
-class player2_front(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("frontRaqueta.png").convert()
-        self.image.set_colorkey(black)
-        self.rect = self.image.get_rect()
-
-class ball(pygame.sprite.Sprite):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("ball.png").convert()
-        self.image.set_colorkey(black)
-        self.rect = self.image.get_rect()
 
 #Lista para guardar los sprites
 allSprites = pygame.sprite.Group()
-
-#Asignar a una variable la clase
-player1 = player1()
-player1_front = player1_front()
-player2 = player2()
-player2_front = player2_front()
-ball = ball()
 
 while True:
     for event in pygame.event.get():
@@ -115,14 +69,14 @@ while True:
 
     #Devuelve la pelota al centro y cambia la dirección en la que iba, además aumenta los marcadores
     if ball_pos_x > 800:
-        ball_pos_x = (size[0]/2)
-        ball_pos_y = (size[1]/2)
+        ball_pos_x = (WINDOW_SIZE[0]/2)
+        ball_pos_y = (WINDOW_SIZE[1]/2)
         ball_speed_x *= -1
         score_player1 += 1
     
     if ball_pos_x < 0:
-        ball_pos_x = (size[0]/2)
-        ball_pos_y = (size[1]/2)
+        ball_pos_x = (WINDOW_SIZE[0]/2)
+        ball_pos_y = (WINDOW_SIZE[1]/2)
         ball_speed_x *= -1
         score_player2 += 1
     
@@ -170,16 +124,15 @@ while True:
     #Agrega los sprites a una lista para poder dibujarlo
     allSprites.add(player1, player2, ball)
     
-    screen.fill(black)
-
+    screen.fill(BLACK)
     #Dibuja los sprites
     allSprites.draw(screen)
 
     #Agrega el jugador y el marcador a la pantalla
-    score1 = font.render(str(score_player1), 0, white)
-    score2 = font.render(str(score_player2), 0, white)
-    Player1 = font.render("- Jugador 1", 0, white )
-    Player2 = font.render("- Jugador 2", 0, white)
+    score1 = font.render(str(score_player1), 0, WHITE)
+    score2 = font.render(str(score_player2), 0, WHITE)
+    Player1 = font.render("- Jugador 1", 0, WHITE )
+    Player2 = font.render("- Jugador 2", 0, WHITE)
     screen.blit(score1, (20,15))
     screen.blit(score2, (570,15))
     screen.blit(Player1, (50, 15))
