@@ -1,7 +1,6 @@
 import pygame
 from Ball import Ball
 from Player import Player
-from Player_Cover import Player_Cover
 
 pygame.init()
 
@@ -10,7 +9,9 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Definir tamaño de la pantalla
-WINDOW_SIZE = (800, 600)
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
 
 # Función para crear la pantalla, variable para controlar los FPS y función para poder mostrar el marcador
 screen = pygame.display.set_mode(WINDOW_SIZE)
@@ -19,15 +20,13 @@ font = pygame.font.Font(None, 50)
 pygame.display.set_caption("PONG")
 
 # Jugador #1
-player1 = Player(BLACK, 5, 250, 0)
-player1_front = Player_Cover(BLACK)
+player1 = Player(BLACK, 20, WINDOW_HEIGHT/2 - 32.5)
 
 # Jugador #2
-player2 = Player(BLACK, 720, 250, 0)
-player2_front = Player_Cover(BLACK)
+player2 = Player(BLACK, WINDOW_WIDTH-36, WINDOW_HEIGHT/2 - 32.5)
 
 # Bola
-ball = Ball(BLACK, WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2, 3, 3)
+ball = Ball(BLACK, WINDOW_WIDTH/2 - 12.5, WINDOW_HEIGHT/2 - 12.5, 3, 3)
 
 # Lista para guardar los sprites
 allSprites = pygame.sprite.Group()
@@ -58,64 +57,51 @@ while True:
                 player2.stop()
 
     # Evitar que la pelota salga por encima o por debajo del mapa
-    if ball.pos_y > 550 or ball.pos_y < 50:
+    if ball.rect.y > WINDOW_HEIGHT-50 or ball.rect.y < 50:
         ball.change_y_direction()
 
     # Devuelve la pelota al centro y cambia la dirección en la que iba, además aumenta los marcadores
-    if ball.pos_x > 800 or ball.pos_x < 0:
-        if ball.pos_x > WINDOW_SIZE[0]:
+    if ball.rect.x > WINDOW_WIDTH or ball.rect.x < 0:
+        if ball.rect.x > WINDOW_WIDTH:
             player1.score_up()
 
-        if ball.pos_x < 0:
+        if ball.rect.x < 0:
             player2.score_up()
 
         ball.reset_to(WINDOW_SIZE[0] / 2, WINDOW_SIZE[1] / 2)
         ball.change_x_direction()
 
     # Cambia la posición de la raqueta y de la bola
-    player1.pos_y += player1.speed_y
-    player2.pos_y += player2.speed_y
-    ball.pos_x += ball.speed_x
-    ball.pos_y += ball.speed_y
+    player1.update()
+    player2.update()
+    ball.update()
 
     # Evita que la raqueta salga del campo de juego
-    if player1.pos_y < 50 or player1.pos_y > 500:
-        player1_speed_y = 0
-    if player2.pos_y < 50 or player2.pos_y > 500:
-        player2_speed_y = 0
-
-    # Coordenadas de player 1
-    player1.rect.x = player1.pos_x
-    player1.rect.y = player1.pos_y
-    player1_front.rect.x = player1.pos_x
-    player1_front.rect.y = player1.pos_y
-
-    # Coordenadas de player 2
-    player2.rect.x = player2.pos_x
-    player2.rect.y = player2.pos_y
-    player2_front.rect.x = player2.pos_x
-    player2_front.rect.y = player2.pos_y
-
-    # Coordenadas de la bola
-    ball.rect.x = ball.pos_x
-    ball.rect.y = ball.pos_y
+    if player1.rect.y < 50 or player1.rect.y > 500:
+        player1.speed_y = 0
+    if player2.rect.y < 50 or player2.rect.y > 500:
+        player2.speed_y = 0
 
     # Colisión entre la bola y los jugadores
     collision_Player1 = pygame.sprite.collide_mask(player1, ball)
-    collision_Front_Player1 = pygame.sprite.collide_mask(player1_front, ball)
     collision_Player2 = pygame.sprite.collide_mask(player2, ball)
-    collision_Front_Player2 = pygame.sprite.collide_mask(player2_front, ball)
 
     # Cambio de dirección cuando choca la bola con las raquetas
-    if collision_Player1 or collision_Player2:
-        ball.speed_y *= -1
+    if collision_Player1:
+        if ball.rect.x < player1.rect.x + 12:
+            continue
+        ball.reset_to(player1.rect.x + 16, ball.rect.y)
+        ball.change_x_direction()
 
-    if collision_Front_Player1 or collision_Front_Player2:
-        ball.speed_x *= -1
+    if collision_Player2:
+
+        if ball.rect.x > player2.rect.x-16:
+            continue
+        ball.reset_to(player2.rect.x - 22, ball.rect.y)
+        ball.change_x_direction()
 
     # Agrega los sprites a una lista para poder dibujarlo
     allSprites.add(player1, player2, ball)
-
     screen.fill(BLACK)
     # Dibuja los sprites
     allSprites.draw(screen)
