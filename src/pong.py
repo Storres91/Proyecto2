@@ -94,16 +94,14 @@ while True:
         ball.change_x_direction()
 
     if collision_Player2:
-
         if ball.rect.x > player2.rect.x-16:
             continue
         ball.reset_to(player2.rect.x - 22, ball.rect.y)
         ball.change_x_direction()
 
-    # Agrega los sprites a una lista para poder dibujarlo
+    # Dibuja los sprites
     allSprites.add(player1, player2, ball)
     screen.fill(BLACK)
-    # Dibuja los sprites
     allSprites.draw(screen)
 
     # Agrega el jugador y el marcador a la pantalla
