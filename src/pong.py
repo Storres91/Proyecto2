@@ -9,8 +9,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Configs
-WINDOW_WIDTH = 1200
-WINDOW_HEIGHT = 1000
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
 WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
 
 MIN_PLAYER_HEIGHT = 80
@@ -111,3 +111,5 @@ while True:
     pygame.display.flip()
 
     clock.tick(60)
+
+#[NEAT]
