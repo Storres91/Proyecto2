@@ -52,20 +52,6 @@ class PongGame:
         genome2.fitness += game_info.right_hits
 
 
-def eval_genomes(genomes, config):
-    width, height = 700, 500
-    window = pygame.display.set_mode((width, height))
-
-    for i, (genome_id1, genome1) in enumerate(genomes):
-        if i == len(genomes) - 1:
-            break
-        genome1.fitness = 0
-        for genome_id2, genome2 in genomes[i+1:]:
-            genome2.fitness = 0 if genome2.fitness == None else genome2.fitness
-            game = PongGame(window, width, height)
-            game.train_ai(genome1, genome2, config)
-
-
 def run_neat(config):
     p = neat.Checkpointer.restore_checkpoint('neat-checkpoint-7')
     #p = neat.Population(config)
