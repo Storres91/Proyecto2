@@ -45,6 +45,11 @@ class Game:
         self.window.blit(right_score_text, (self.window_width * (3/4) -
                                             right_score_text.get_width()//2, 20))
 
+    def _draw_hits(self):
+        hits_text = self.SCORE_FONT.render(
+            f"{self.left_hits+self.right_hits}", 1, self.WHITE)
+        self.window.blit(hits_text, (self.window_width //
+                                     2 - hits_text.get_width()//2, 10))
 
     def _handle_collision(self):
         ball = self.ball
@@ -85,6 +90,9 @@ class Game:
 
         if draw_score:
             self._draw_score()
+        
+        if draw_hits:
+            self._draw_hits()
 
         for paddle in [self.left_paddle, self.right_paddle]:
             paddle.draw(self.window)
